@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from kivy.garden.spine import SpineAsset
+from kivyspinepy3 import SpineAsset
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout

@@ -1,37 +1,36 @@
 # coding=utf-8
 
-import spine
+from spine import *
 from spine.SkeletonJson import SkeletonJson
 from os.path import dirname, join, realpath
 from kivy.core.image import Image
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
-from kivy.properties import (StringProperty, ListProperty, BooleanProperty,
-                             OptionProperty)
+from kivy.properties import StringProperty, ListProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
 from kivy.graphics import Color, Mesh, PushMatrix, PopMatrix, Canvas
 
 
-class AtlasPage(spine.AtlasPage):
+class KivyAtlasPage(AtlasPage):
     def __init__(self):
-        super(AtlasPage, self).__init__()
+        super(KivyAtlasPage, self).__init__()
         self.texture = None
 
 
-class AtlasRegion(spine.AtlasRegion):
+class KivyAtlasRegion(AtlasRegion):
     def __init__(self):
-        super(AtlasRegion, self).__init__()
+        super(KivyAtlasRegion, self).__init__()
         self.page = None
 
 
-class Atlas(spine.Atlas):
+class KivyAtlas(Atlas):
     def __init__(self, filename):
         self.atlas_dir = dirname(filename)
-        super(Atlas, self).__init__()
-        super(Atlas, self).loadWithFile(filename)
+        super(KivyAtlas, self).__init__()
+        super(KivyAtlas, self).loadWithFile(filename)
 
     def newAtlasPage(self, name):
-        page = AtlasPage()
+        page = KivyAtlasPage()
         filename = realpath(join(self.atlas_dir, name))
         if filename:
             page.texture = Image(filename).texture
@@ -39,17 +38,17 @@ class Atlas(spine.Atlas):
         return page
 
     def newAtlasRegion(self, page):
-        region = AtlasRegion()
+        region = KivyAtlasRegion()
         region.page = page
         return region
 
     def findRegion(self, name):
-        return super(Atlas, self).findRegion(name)
+        return super(KivyAtlas, self).findRegion(name)
 
 
-class RegionAttachment(spine.RegionAttachment):
+class KivyRegionAttachment(RegionAttachment):
     def __init__(self, region):
-        super(RegionAttachment, self).__init__()
+        super(KivyRegionAttachment, self).__init__()
         self.texture = region.page.texture.get_region(
             region.x, region.y, region.width, region.height)
         u, v = self.texture.uvpos
@@ -59,6 +58,7 @@ class RegionAttachment(spine.RegionAttachment):
         self.u2 = u + uw
         self.v2 = v + vh
         self.first_time = True
+        self.debug = False
         if region.rotate:
             self._tex_coords = (
                 self.u2,  # self.vertices[0].texCoords.x
@@ -166,17 +166,17 @@ class RegionAttachment(spine.RegionAttachment):
         ]
 
 
-class AtlasAttachmentLoader(spine.AttachmentLoader.AttachmentLoader):
+class KivyAtlasAttachmentLoader(AttachmentLoader):
     def __init__(self, atlas):
-        super(AtlasAttachmentLoader, self).__init__()
+        super(KivyAtlasAttachmentLoader, self).__init__()
         self.atlas = atlas
 
     def newAttachment(self, tp, name):
-        if tp == spine.AttachmentLoader.AttachmentType.region:
+        if tp == AttachmentType.region:
             region = self.atlas.findRegion(name)
             if not region:
                 raise Exception("Atlas region not found: %s" % name)
-            return RegionAttachment(region)
+            return KivyRegionAttachment(region)
         else:
             raise Exception('Unknown attachment type: %s' % type)
 
@@ -200,19 +200,16 @@ class Line(object):
         self.length = length
         self.rotation = 0.0
         self.color = (255, 0, 0, 255)
-        self.texture = pygame.Surface((640, 480), pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.texture, (255, 255, 0, 64),
-                         (0, 0, self.texture.get_width(),
-                          self.texture.get_height()), 1)
+        self.texture = None
+        self.xScale = 0
 
     def rotate(self):
-        return pygame.transform.rotozoom(self.texture, self.rotation,
-                                         self.xScale)
+        return None
 
 
-class Skeleton(spine.Skeleton):
+class KivySkeleton(Skeleton):
     def __init__(self, skeletonData):
-        super(Skeleton, self).__init__(skeletonData=skeletonData)
+        super(KivySkeleton, self).__init__(skeletonData=skeletonData)
         self.x = 0
         self.y = 0
         self.texture = None
@@ -313,12 +310,12 @@ class SpineAsset(Widget):
         self.skeleton.debug = self.debug
 
     def load_spine_asset(self, basefn):
-        atlas = Atlas(filename="{}.atlas".format(basefn))
-        loader = AtlasAttachmentLoader(atlas)
+        atlas = KivyAtlas(filename="{}.atlas".format(basefn))
+        loader = KivyAtlasAttachmentLoader(atlas)
         skeletonJson = SkeletonJson(loader)
         self.skeletonData = skeletonJson.readSkeletonDataFile(
             "{}.json".format(basefn))
-        self.skeleton = Skeleton(skeletonData=self.skeletonData)
+        self.skeleton = KivySkeleton(skeletonData=self.skeletonData)
         self.skeleton.debug = False
         self.animation = None
 

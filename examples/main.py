@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from kivy.app import App
-from kivy.garden.spine import SpineAsset
+from kivyspinepy3 import SpineAsset
 
 class SpineApp(App):
     def build(self):
