@@ -2,7 +2,7 @@
 
 `SpineAsset` is a Kivy widget that load and animate [Spine](http://esotericsoftware.com/) assets.
 
-![Simple example](https://github.com/SGGames/kivy-spine-python3/master/screenshot.png)
+![Simple example](https://github.com/SGGames/kivy-spine-python3/blob/master/screenshot.png)
 
 Fork from: https://github.com/kivy-garden/garden.spine
 - Support python 3
@@ -41,4 +41,4 @@ if __name__ == "__main__":
 
 See `examples` directory for an asset viewer (you can control the animation to apply, and load a different asset)
 
-![Asset browser](https://github.com/SGGames/kivy-spine-python3/master/screenshot2.png)
+![Asset browser](https://github.com/SGGames/kivy-spine-python3/blob/master/screenshot2.png)
