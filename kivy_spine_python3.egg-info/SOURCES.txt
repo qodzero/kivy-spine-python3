@@ -1,0 +1,7 @@
+README.md
+setup.py
+kivy_spine_python3.egg-info/PKG-INFO
+kivy_spine_python3.egg-info/SOURCES.txt
+kivy_spine_python3.egg-info/dependency_links.txt
+kivy_spine_python3.egg-info/top_level.txt
+src/__init__.py

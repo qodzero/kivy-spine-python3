@@ -2,6 +2,10 @@
 
 from spine import *
 from spine.SkeletonJson import SkeletonJson
+from spine.Atlas import AtlasPage, AtlasRegion, Atlas
+from spine.AttachmentLoader import AttachmentLoader, AttachmentType
+from spine.RegionAttachment import RegionAttachment
+from spine.Skeleton import Skeleton
 from os.path import dirname, join, realpath
 from kivy.core.image import Image
 from kivy.uix.widget import Widget
